@@ -1,77 +1,106 @@
-import os
-import sys
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from shared.student import VARIANT_NUMBER
-
 users = {
-    "admin15": {"role": "administrator", "clearance": 4, "department": "IT", "active": True},
-    "analyst15": {"role": "analyst", "clearance": 2, "department": "Security", "active": True},
-    "guest15": {"role": "guest", "clearance": 1, "department": "External", "active": True},
-    "manager15": {"role": "manager", "clearance": 3, "department": "Operations", "active": True},
-    "blocked15": {"role": "contractor", "clearance": 1, "department": "External", "active": False},
+    "quantum_researcher": {
+        "role": "quantum_security",
+        "clearance": 4,
+        "department": "Quantum Research",
+        "active": True,
+    },
+    "post_quantum_dev": {
+        "role": "pq_cryptographer",
+        "clearance": 4,
+        "department": "Post-Quantum",
+        "active": True,
+    },
+    "network_security": {
+        "role": "network_security",
+        "clearance": 3,
+        "department": "Network Security",
+        "active": True,
+    },
+    "crypto_intern": {
+        "role": "crypto_intern",
+        "clearance": 1,
+        "department": "Internship",
+        "active": True,
+    },
+    "quantum_sim": {
+        "role": "simulator",
+        "clearance": 2,
+        "department": "Simulation",
+        "active": False,
+    },
 }
 
 resources = [
-    ("database_backup", 4),
-    ("user_logs", 2),
-    ("public_docs", 1),
-    ("financial_reports", 3),
-    ("system_config", 4),
-    ("training_materials", 1),
-    ("security_policies", 3),
-    ("audit_logs", 4),
-    ("employee_data", 3),
-    ("temp_files", 1),
+    ("quantum_algorithms", 4),
+    ("pq_implementations", 4),
+    ("network_protocols", 3),
+    ("learning_materials", 1),
+    ("quantum_keys", 4),
+    ("educational_content", 1),
+    ("hybrid_systems", 3),
+    ("quantum_computers", 4),
+    ("crypto_libraries", 2),
+    ("tutorials", 1),
 ]
 
-security_levels = ("Public", "Internal", "Confidential", "Secret")
-blocked_users = {"blocked15", "temp_user", "suspended_acc"}
+security_levels = ("Educational", "Research", "Classified Research", "Quantum Secure")
+
+blocked_users = {"quantum_sim", "quantum_attack", "algorithm_theft"}
 
 
-def check_access(username, resource):
-    res_name = resource[0]
-    res_level = resource[1]
+def get_security_level_name(level: int) -> str:
+    """перетворює числовий рівень допуску (1-4) у його словесну назву."""
+    # рівні починаються з 1, а індексація списків/кортежів з 0, ми віднімаємо 1.
+    return security_levels[level - 1]
 
-    # чи існує користувач у системі
-    if username not in users:
-        return "DENY", "Користувача не знайдено"
+def print_resources() -> None:
+    """виводить у консоль загальний список усіх ресурсів та їхній текстовий рівень безпеки."""
+    print("Список ресурсів системи")
+    for resource_name, level in resources:
+        level_name = get_security_level_name(level)
+        print(f"{resource_name} -> рівень безпеки: {level_name}")
+    print()
 
-    # чи заблокований користувач
+
+def check_access(username: str, resource_name: str, required_level: int) -> tuple[str, str]:
+    
+    # 1. Перевіряємо існування користувача в словнику users.
+    #    метод .get() безпечніший за users[username], бо не викликає KeyError, якщо ключа немає — просто повертає None.
+    user_data = users.get(username)
+    if user_data is None:
+        return "DENY", "User not found"
+
+    # 2. Перевіряємо, чи користувач у списку заблокованих.
     if username in blocked_users:
-        return "DENY", "Користувач заблокований"
+        return "DENY", "User is blocked"
 
-    # чи активний акаунт
-    user_info = users[username]
-    if user_info["active"] == False:
-        return "DENY", "Акаунт неактивний"
+    # 3. Перевіряємо активності облікового запису.
+    if not user_data["active"]:
+        return "DENY", "Account inactive"
 
-    # чи рівень допуску користувача >= рівню ресурсу
-    user_clearance = user_info["clearance"]
-    if user_clearance >= res_level:
-        return "ALLOW", "Доступ дозволено"
-    else:
-        return "DENY", "Недостатній рівень допуску"
+    # 4. Порівняння рівня допуску користувача з рівнем безпеки ресурсу.
+    if user_data["clearance"] >= required_level:
+        return "ALLOW", ""
+    return "DENY", "Insufficient clearance"
 
-print(" СПИСОК РЕСУРСІВ СИСТЕМИ (Варіант", VARIANT_NUMBER, ") ")
-for item in resources:
-    res_name = item[0]
-    res_level_num = item[1]
 
-    # перетворюємо число (1-4) на текст ("Public" - "Secret")
-    # віднімаємо 1, бо індекси починаються з 0 (1-1=0 -> Public)
-    level_text = security_levels[res_level_num - 1]
+def run_access_checks() -> None:
+    print("Результати перевірки доступу")
+    for username in users:
+        for resource_name, required_level in resources:
+            decision, reason = check_access(username, resource_name, required_level)
+            if decision == "ALLOW":
+                print(f"user={username} resource={resource_name} -> ALLOW")
+            else:
+                print(f"user={username} resource={resource_name} -> DENY ({reason})")
 
-    print("Ресурс:", res_name, "| Рівень безпеки:", level_text)
 
-print("\n ПЕРЕВІРКА ДОСТУПУ КОРИСТУВАЧІВ ")
+def main() -> None:
+    #головна функція: запускає весь сценарій завдання
+    print_resources()
+    run_access_checks()
 
-# список користувачів для перевірки (неіснуючого для тесту)
-test_users = ["admin15", "analyst15", "blocked15", "unknown_user"]
 
-for username in test_users:
-    print("\n Користувач:", username)
-    for res in resources:
-        status, reason = check_access(username, res)
-        res_name = res[0]
-        print("  Ресурс:", res_name, "-> Статус:", status, "(Причина:", reason + ")")
+if __name__ == "__main__":
+    main()

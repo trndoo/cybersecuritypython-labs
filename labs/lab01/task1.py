@@ -6,17 +6,19 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"
 from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
 
 passwords = [
-    "password123",
-    "Qwerty!2023",
-    "admin_root",
-    "MyP@ssw0rd2026",
-    "12345678",
-    "SecurePass!15",
-    "test_user",
-    "P@ssw0rd15_test",
-    "welcome2026",
-    "StrongP@ss15!",
+    "IoT@S3curity",
+    "standard",
+    "Blockchain@Pr0tect",
+    "typical123",
+    "AI@Cybersec",
+    "normal",
+    "Quantum@Crypt0",
+    "general123",
+    "Edge@S3curity",
+    "common",
+    "gdhduu57M!"
 ]
+
 
 criteria = {
     "min_length": 8,
@@ -25,7 +27,14 @@ criteria = {
     "require_special": True,
 }
 
-forbidden_passwords = ["password", "123456", "admin", "test", "welcome", "qwerty"]
+forbidden_passwords = [
+    "standard",
+    "typical123",
+    "normal",
+    "general123",
+    "common",
+    "guest",
+]
 
 
 def check_password(password, all_passwords):
@@ -61,13 +70,16 @@ def check_password(password, all_passwords):
     if has_special:
         criteria_count += 1
 
-    # Чи виконано всі 4 критерії
+    # чи виконано всі 4 критерії
     all_met = has_digit and has_upper and has_lower and has_special
 
     # оцінка надійності за вимогами
     if all_met:
-        # дуже сильний: 
-        if len(password) >= criteria["min_length"] + 4 and all_passwords.count(password) == 1:
+        # дуже сильний:
+        if (
+            len(password) >= criteria["min_length"] + 4
+            and all_passwords.count(password) == 1
+        ):
             return "дуже сильний"
         else:
             return "сильний"
@@ -75,6 +87,7 @@ def check_password(password, all_passwords):
         return "середній"
     else:
         return "слабкий"
+
 
 print("Студент:", STUDENT_NAME)
 print("Група:", GROUP_NAME)
@@ -89,7 +102,7 @@ for _ in range(3):
     extended_passwords.append(random_password)
 
 # результат
-print("Пароль                 | Оцінка")
+print("Пароль                | Оцінка")
 print("-" * 40)
 for pwd in extended_passwords:
     rating = check_password(pwd, extended_passwords)

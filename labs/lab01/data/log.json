@@ -1,14 +1,34 @@
 [
-    {
-        "event": "login",
-        "user": "alice15",
-        "result": "success",
-        "timestamp": "2026-09-17 22:41:15"
-    },
-    {
-        "event": "login",
-        "user": "alice15",
-        "result": "failure",
-        "timestamp": "2026-09-17 22:41:15"
-    }
+  {
+    "event": "login",
+    "user": "q_researcher",
+    "result": "success",
+    "timestamp": "2026-09-24 23:52:28",
+    "args": [],
+    "kwargs": {}
+  },
+  {
+    "event": "login",
+    "user": "q_researcher",
+    "result": "failure",
+    "timestamp": "2026-09-24 23:52:28",
+    "args": [],
+    "kwargs": {}
+  },
+  {
+    "event": "login",
+    "user": "q_researcher",
+    "result": "success",
+    "timestamp": "2026-09-24 23:57:49",
+    "args": [],
+    "kwargs": {}
+  },
+  {
+    "event": "login",
+    "user": "q_researcher",
+    "result": "failure",
+    "timestamp": "2026-09-24 23:57:49",
+    "args": [],
+    "kwargs": {}
+  }
 ]
