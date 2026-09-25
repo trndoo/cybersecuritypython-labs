@@ -16,7 +16,6 @@ passwords = [
     "general123",
     "Edge@S3curity",
     "common",
-    "gdhduu57M!"
 ]
 
 
