@@ -1,3 +1,14 @@
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
+
+print("Студент:", STUDENT_NAME)
+print("Група:", GROUP_NAME)
+print("Варіант:", VARIANT_NUMBER)
+print("-" * 40)
+
 users = {
     "quantum_researcher": {
         "role": "quantum_security",
@@ -54,6 +65,7 @@ def get_security_level_name(level: int) -> str:
     # рівні починаються з 1, а індексація списків/кортежів з 0, ми віднімаємо 1.
     return security_levels[level - 1]
 
+
 def print_resources() -> None:
     """виводить у консоль загальний список усіх ресурсів та їхній текстовий рівень безпеки."""
     print("Список ресурсів системи")
@@ -63,8 +75,9 @@ def print_resources() -> None:
     print()
 
 
-def check_access(username: str, resource_name: str, required_level: int) -> tuple[str, str]:
-    
+def check_access(
+    username: str, resource_name: str, required_level: int
+) -> tuple[str, str]:
     # 1. Перевіряємо існування користувача в словнику users.
     #    метод .get() безпечніший за users[username], бо не викликає KeyError, якщо ключа немає — просто повертає None.
     user_data = users.get(username)
@@ -97,7 +110,7 @@ def run_access_checks() -> None:
 
 
 def main() -> None:
-    #головна функція: запускає весь сценарій завдання
+    # головна функція: запускає весь сценарій завдання
     print_resources()
     run_access_checks()
 

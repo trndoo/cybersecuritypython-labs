@@ -4,6 +4,15 @@ import json
 import os
 from datetime import datetime
 from functools import wraps
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
+
+print("Студент:", STUDENT_NAME)
+print("Група:", GROUP_NAME)
+print("Варіант:", VARIANT_NUMBER)
+print("-" * 40)
 
 VARIANT_NUMBER = 15
 HASH_ALGORITHM = "sha1"
@@ -27,7 +36,8 @@ users_to_register = (
     ("hybrid_dev", "Hybr1dSystem@Dev"),
     ("key_manager", "K3yManager#2023"),
     ("tutor_bot", "Tut0rBot@Secure1"),
-    ("user_33", "fhkeeityyyyyYYY774!")
+    ("", "RTTGduuehs@13xbama"),
+    ("RTTGduuehs@13xbama", ""),
 )
 
 
@@ -52,16 +62,16 @@ def generate_hash(password: str, salt: str = "00000") -> str:
     return hash_object.hexdigest()
 
 
-def create_user(username: str, password: str) -> tuple[str, str]:
-    # створюється запис користувача. 
+def create_user(username: str, password: str):
+    # створення користувача: якщо логіна немає, повертає None без хешування.
     # хешування виконується з персональною сіллю.
-
-    hash_value = generate_hash(password, PERSONAL_SALT)
-    return username, hash_value
+    if not username or not username.strip():
+        return None, None
+    return username, generate_hash(password, PERSONAL_SALT)
 
 
 def create_users(users_list: tuple) -> None:
-    # хахешувати список користувачів і записати їх у CSV-файл.
+    # захешувати список користувачів і записати їх у CSV-файл.
     # папка data/ створюється автоматично, якщо її ще немає.
     # exist_ok=True означає: якщо папка вже є, не викидати помилку.
 
@@ -71,9 +81,11 @@ def create_users(users_list: tuple) -> None:
         writer = csv.writer(csv_file)
         for username, password in users_list:
             login, hash_value = create_user(username, password)
-            writer.writerow([login, hash_value])
+            # записуємо у файл тільки якщо є логін
+            if login:
+                writer.writerow([login, hash_value])
 
-    print(f"Створено {len(users_list)} користувачів у файлі {USERS_CSV_PATH}")
+    print(f"Створено користувачів у файлі {USERS_CSV_PATH}")
 
 
 def read_users_db() -> list:
@@ -98,7 +110,7 @@ def print_users_db(users_db: list) -> None:
 def log_event(func):
     """декоратор, що логує кожен виклик функції входу у JSON-файл.
     логування винесено в окремий декоратор (а не всередину login())"""
-    # для перевірки автентифікації. 
+    # для перевірки автентифікації.
 
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -134,8 +146,8 @@ def log_event(func):
 
 def _append_log_entry(entry: dict) -> None:
     """додати один запис у JSON-файл журналу подій.
-       файл зберігається як список записів. якщо файл ще не існує
-       або пошкоджений, створюємо новий список."""
+    файл зберігається як список записів. якщо файл ще не існує
+    або пошкоджений, створюємо новий список."""
     os.makedirs(DATA_DIR, exist_ok=True)
 
     try:
@@ -168,7 +180,7 @@ def login(username: str, password: str) -> bool:
 
 
 def main() -> None:
-    # головна функція. 
+    # головна функція.
     try:
         # 1. реєстрація користувачів та запис у CSV.
         create_users(users_to_register)
