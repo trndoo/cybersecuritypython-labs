@@ -1,0 +1,109 @@
+{
+  "source_file": "C:\\Users\\hp\\Desktop\\ПСМ\\cybersecuritypython-labs\\labs\\lab02\\data\\data_v15\\sudo.log",
+  "generated_at": "2026-10-15T20:39:34+00:00",
+  "alert_patterns": [
+    "chmod 777",
+    "nc",
+    "nmap",
+    "dd",
+    "/etc/shadow"
+  ],
+  "summary": {
+    "total_sudo_commands": 12,
+    "root_executions": 10,
+    "suspicious_commands": 7,
+    "skipped_lines": 0,
+    "first_event": "2026-09-27T08:10:00+03:00",
+    "last_event": "2026-09-27T12:05:00+03:00"
+  },
+  "commands_per_user": {
+    "carol": 5,
+    "alice": 3,
+    "dave": 2,
+    "bob": 1,
+    "eve": 1
+  },
+  "suspicious_per_user": {
+    "carol": 5,
+    "dave": 2
+  },
+  "suspicious_entries": [
+    {
+      "timestamp": "2026-09-27T09:20:00+03:00",
+      "user": "carol",
+      "tty": "pts/2",
+      "pwd": "/tmp",
+      "target_user": "root",
+      "command": "/usr/bin/chmod 777 /srv/share",
+      "matched_patterns": [
+        "chmod 777"
+      ]
+    },
+    {
+      "timestamp": "2026-09-27T09:30:00+03:00",
+      "user": "carol",
+      "tty": "pts/2",
+      "pwd": "/tmp",
+      "target_user": "root",
+      "command": "/usr/bin/nc -lvp 4444",
+      "matched_patterns": [
+        "nc"
+      ]
+    },
+    {
+      "timestamp": "2026-09-27T09:32:00+03:00",
+      "user": "carol",
+      "tty": "pts/2",
+      "pwd": "/tmp",
+      "target_user": "root",
+      "command": "/usr/bin/nmap -sS 10.0.0.0/24",
+      "matched_patterns": [
+        "nmap"
+      ]
+    },
+    {
+      "timestamp": "2026-09-27T10:00:00+03:00",
+      "user": "dave",
+      "tty": "pts/3",
+      "pwd": "/home/dave",
+      "target_user": "root",
+      "command": "/usr/bin/dd if=/dev/zero of=/tmp/test.img bs=1M count=10",
+      "matched_patterns": [
+        "dd"
+      ]
+    },
+    {
+      "timestamp": "2026-09-27T10:10:00+03:00",
+      "user": "dave",
+      "tty": "pts/3",
+      "pwd": "/etc",
+      "target_user": "root",
+      "command": "/usr/bin/vim /etc/shadow",
+      "matched_patterns": [
+        "/etc/shadow"
+      ]
+    },
+    {
+      "timestamp": "2026-09-27T12:00:00+03:00",
+      "user": "carol",
+      "tty": "pts/2",
+      "pwd": "/tmp",
+      "target_user": "root",
+      "command": "/usr/bin/chmod 777 /tmp/public",
+      "matched_patterns": [
+        "chmod 777"
+      ]
+    },
+    {
+      "timestamp": "2026-09-27T12:05:00+03:00",
+      "user": "carol",
+      "tty": "pts/2",
+      "pwd": "/tmp",
+      "target_user": "root",
+      "command": "/usr/bin/nc 203.0.113.10 9001",
+      "matched_patterns": [
+        "nc"
+      ]
+    }
+  ]
+}
